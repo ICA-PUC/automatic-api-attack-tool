@@ -1,0 +1,485 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/auth/login": {
+      "post": {
+        "consumes": [
+          "application/x-www-form-urlencoded"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "formData",
+            "name": "grant_type",
+            "pattern": "password",
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "username",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "password",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "default": "",
+            "in": "formData",
+            "name": "scope",
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "client_id",
+            "type": "string"
+          },
+          {
+            "in": "formData",
+            "name": "client_secret",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {}
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "description": "Login endpoint",
+        "operationId": "login_for_access_token_auth_login_post",
+        "summary": "Login For Access Token"
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {}
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Logout current logged-in user",
+        "operationId": "logout_auth_logout_get",
+        "summary": "Logout"
+      }
+    },
+    "/cancel_task/{task_id}": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {}
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Cancel a running task given its ID",
+        "operationId": "cancel_task_cancel_task__task_id__post",
+        "summary": "Cancel Task"
+      }
+    },
+    "/job_output/{task_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {}
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Read job output .txt file and send it as response",
+        "operationId": "get_job_output_job_output__task_id__get",
+        "summary": "Get Job Output"
+      }
+    },
+    "/job_status/{task_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {}
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Retrieve job status given task ID",
+        "operationId": "get_job_status_job_status__task_id__get",
+        "summary": "Get Job Status"
+      }
+    },
+    "/new_task/": {
+      "post": {
+        "consumes": [
+          "multipart/form-data"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "collectionFormat": "csv",
+            "in": "formData",
+            "items": {
+              "format": "binary",
+              "type": "string"
+            },
+            "name": "files",
+            "required": true,
+            "type": "array"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/TaskBase"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Create new task and save it to DB",
+        "operationId": "create_task_new_task__post",
+        "summary": "Create Task"
+      }
+    },
+    "/run_id/{task_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {}
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Retrieve run_id for given task",
+        "operationId": "get_run_id_run_id__task_id__get",
+        "summary": "Get Run Id"
+      }
+    },
+    "/task/{task_id}": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "task_id",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "$ref": "#/definitions/TaskBase"
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "schema": {
+              "$ref": "#/definitions/HTTPValidationError"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Retreive a single task given task ID",
+        "operationId": "get_task_by_id_task__task_id__get",
+        "summary": "Get Task By Id"
+      }
+    },
+    "/tasks/": {
+      "get": {
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "schema": {
+              "items": {
+                "$ref": "#/definitions/TaskBase"
+              },
+              "title": "Response Get Tasks Tasks  Get",
+              "type": "array"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2PasswordBearer": []
+          }
+        ],
+        "description": "Retrieve all saved tasks",
+        "operationId": "get_tasks_tasks__get",
+        "summary": "Get Tasks"
+      }
+    }
+  },
+  "definitions": {
+    "Body_create_task_new_task__post": {
+      "properties": {
+        "files": {
+          "items": {
+            "format": "binary",
+            "type": "string"
+          },
+          "title": "Files",
+          "type": "array"
+        }
+      },
+      "required": [
+        "files"
+      ],
+      "title": "Body_create_task_new_task__post",
+      "type": "object"
+    },
+    "Body_login_for_access_token_auth_login_post": {
+      "properties": {
+        "client_id": {
+          "title": "Client Id",
+          "type": "string"
+        },
+        "client_secret": {
+          "title": "Client Secret",
+          "type": "string"
+        },
+        "grant_type": {
+          "pattern": "password",
+          "title": "Grant Type",
+          "type": "string"
+        },
+        "password": {
+          "title": "Password",
+          "type": "string"
+        },
+        "scope": {
+          "default": "",
+          "title": "Scope",
+          "type": "string"
+        },
+        "username": {
+          "title": "Username",
+          "type": "string"
+        }
+      },
+      "required": [
+        "username",
+        "password"
+      ],
+      "title": "Body_login_for_access_token_auth_login_post",
+      "type": "object"
+    },
+    "HTTPValidationError": {
+      "properties": {
+        "detail": {
+          "items": {
+            "$ref": "#/definitions/ValidationError"
+          },
+          "title": "Detail",
+          "type": "array"
+        }
+      },
+      "title": "HTTPValidationError",
+      "type": "object"
+    },
+    "TaskBase": {
+      "description": "Task base model class\n\n:param SQLModel: Default SQLModel class\n:type SQLModel: obj",
+      "properties": {
+        "dataset_file": {
+          "title": "Dataset File",
+          "type": "string"
+        },
+        "id": {
+          "title": "Id",
+          "type": "string"
+        },
+        "job_id": {
+          "title": "Job Id",
+          "type": "integer"
+        },
+        "job_status": {
+          "title": "Job Status",
+          "type": "string"
+        },
+        "processor_file": {
+          "title": "Processor File",
+          "type": "string"
+        },
+        "project_path": {
+          "title": "Project Path",
+          "type": "string"
+        },
+        "run_id": {
+          "title": "Run Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "job_id",
+        "job_status",
+        "dataset_file",
+        "processor_file",
+        "project_path"
+      ],
+      "title": "TaskBase",
+      "type": "object"
+    },
+    "ValidationError": {
+      "properties": {
+        "loc": {
+          "items": {},
+          "title": "Location",
+          "type": "array"
+        },
+        "msg": {
+          "title": "Message",
+          "type": "string"
+        },
+        "type": {
+          "title": "Error Type",
+          "type": "string"
+        }
+      },
+      "required": [
+        "loc",
+        "msg",
+        "type"
+      ],
+      "title": "ValidationError",
+      "type": "object"
+    }
+  },
+  "securityDefinitions": {
+    "OAuth2PasswordBearer": {
+      "flow": "password",
+      "scopes": {},
+      "tokenUrl": "/auth/login",
+      "type": "oauth2"
+    }
+  },
+  "x-components": {}
+}
